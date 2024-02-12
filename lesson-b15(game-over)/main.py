@@ -17,7 +17,6 @@ leftBoundary = 0
 rightPlayerBoundary, rightEnemyBoundary = 740, 750
 upperBoundary = 0
 
-# always play the bg sound
 mixer.music.load("./assets/sound/background.wav")
 mixer.music.play(-1)
 
@@ -52,6 +51,10 @@ score = 0
 font = pygame.font.Font("./assets/fonts/flamouse/Flamouse Personal Use Only.ttf",30)
 textX, textY = 10, 10
 
+# setup the game over text
+game_over = pygame.font.Font("./assets/fonts/flamouse/Flamouse Personal Use Only.ttf", 62)
+game_overX, game_overY = 200, 250
+
 def player(x, y):
   screen.blit(playerImage, (x, y))
 
@@ -75,6 +78,11 @@ def increaseSpeed(score):
       else:
         enemyX_moving[i] += .1
 
+# define the game over functionality
+def game_over_text():
+  text = game_over.render("GAME OVER", True, (255, 255, 255))
+  screen.blit(text, (game_overX, game_overY))
+
 running = True 
 while running:
   for event in pygame.event.get():
@@ -86,7 +94,6 @@ while running:
       elif event.key == pygame.K_RIGHT:
         playerX_moving = speedPlayerX
       elif event.key == pygame.K_SPACE and bulletState is "ready":
-        # play the laser sound
         bullet_sound = mixer.Sound("./assets/sound/laser.wav")
         bullet_sound.play()
         bulletX = playerX
@@ -103,6 +110,12 @@ while running:
   screen.blit(bg_image, (0, 0))
 
   for i in range(num_of_enemies):
+    # check if any of the ships made it to the player
+    if enemyY[i] >= 490:
+      enemyY = [2000] * num_of_enemies
+      game_over_text()
+      break
+
     enemyX[i] += enemyX_moving[i]
     if enemyX[i] >= rightEnemyBoundary or enemyX[i] <= leftBoundary:
       enemyX_moving[i] *= -1
@@ -115,7 +128,6 @@ while running:
       score += 1
       increaseSpeed(score)
       text = font.render(f"Score: {score}", True, (255, 255, 255))
-      # play the explosion sound
       explosion_sound = mixer.Sound("./assets/sound/explosion.wav")
       explosion_sound.play()
 
