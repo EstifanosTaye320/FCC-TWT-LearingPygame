@@ -43,7 +43,6 @@ newBulletW, newBulletH = 30, 30
 bulletImage = pygame.transform.scale(bulletImage, (newBulletW, newBulletH))
 bulletState = "ready"
 
-# declaration of the font and font size
 score = 0
 font = pygame.font.Font("./assets/fonts/flamouse/Flamouse Personal Use Only.ttf",30)
 textX, textY = 10, 10
@@ -91,7 +90,6 @@ while running:
   if (playerX_moving == -speedPlayerX and playerX > leftBoundary) or (playerX_moving == speedPlayerX and playerX < rightPlayerBoundary):
     playerX += playerX_moving
 
-  # initation of the score text (put on surface)
   text = font.render(f"Score: {score}", True, (255, 255, 255))
 
   screen.blit(bg_image, (0, 0))
@@ -108,7 +106,6 @@ while running:
       enemyX[i], enemyY[i] = random.randint(leftBoundary, rightEnemyBoundary-1), random.randint(40, 100)
       score += 1
       increaseSpeed(score)
-      # update the score (update on surface)
       text = font.render(f"Score: {score}", True, (255, 255, 255))
 
     enemy(enemyX[i], enemyY[i])
@@ -122,7 +119,6 @@ while running:
 
   player(playerX, playerY)
 
-  # display the score (display surface)
   screen.blit(text, (textX, textY))
 
   pygame.display.update()
