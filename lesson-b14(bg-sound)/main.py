@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+from pygame import mixer
 
 pygame.init()
 
@@ -15,6 +16,9 @@ bg_image = pygame.transform.scale(bg_image, (800, 600))
 leftBoundary = 0
 rightPlayerBoundary, rightEnemyBoundary = 740, 750
 upperBoundary = 0
+
+mixer.music.load("./assets/sound/background.wav")
+mixer.music.play(-1)
 
 playerImage = pygame.image.load("./assets/images/spaceship.png")
 playerX, playerY = 370, 510
@@ -81,6 +85,8 @@ while running:
       elif event.key == pygame.K_RIGHT:
         playerX_moving = speedPlayerX
       elif event.key == pygame.K_SPACE and bulletState is "ready":
+        bullet_sound = mixer.Sound("./assets/sound/laser.wav")
+        bullet_sound.play()
         bulletX = playerX
         bulletState = "fire"
     elif event.type == pygame.KEYUP:
@@ -107,6 +113,8 @@ while running:
       score += 1
       increaseSpeed(score)
       text = font.render(f"Score: {score}", True, (255, 255, 255))
+      explosion_sound = mixer.Sound("./assets/sound/explosion.wav")
+      explosion_sound.play()
 
     enemy(enemyX[i], enemyY[i])
 
